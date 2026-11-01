@@ -3,7 +3,11 @@ import axios from "axios";
 // Centralized API Base URL
 // In development, it defaults to http://localhost:5001 (to avoid collision with port 5000)
 // In production, configure REACT_APP_API_URL in .env or your hosting dashboard
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://construction-crm-6x9k.onrender.com"
+    : "http://localhost:5001");
 
 // =========================================================
 // SECURITY: Global Axios Interceptor for JWT Authentication
