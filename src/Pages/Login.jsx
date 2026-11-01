@@ -73,26 +73,7 @@ try {
 // GOOGLE LOGIN
 // =====================================
 
-const handleGoogleLogin = () => {
-alert("Google login will be added later.");
-};
-
-// =====================================
-// GITHUB LOGIN
-// =====================================
-
-const handleGithubLogin = () => {
-alert("GitHub login will be added later.");
-};
-
-// =====================================
-// REGISTER
-// =====================================
-
-const handleRegister = (e) => {
-e.preventDefault();
-alert("Account registration is managed by the administrator.");
-};
+/* Google, GitHub & Register handlers reserved for future SSO integrations */
 
 // =====================================
 // FORGOT PASSWORD
@@ -283,13 +264,13 @@ return ( <div className="login-wrapper">
         </label>
 
 
-        <a
-          href="#"
-          className="forgot-password-link"
+        <button
+          type="button"
+          className="forgot-password-link btn btn-link p-0 text-decoration-none"
           onClick={handleForgotPassword}
         >
           Forgot Password?
-        </a>
+        </button>
 
       </div>
 

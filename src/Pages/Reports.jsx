@@ -204,6 +204,7 @@ function Reports() {
 
     fetchReport();
     return () => { isMounted = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedReport, search, statusFilter, brokerFilter, dateFrom, dateTo]);
 
   useEffect(() => {
