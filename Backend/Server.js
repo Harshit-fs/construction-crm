@@ -24,46 +24,42 @@ const notificationRoutes = require("./Routes/notifications");
 
 const app = express();
 
+// Trust reverse proxy (Render / Cloudflare / Vercel)
+app.set("trust proxy", 1);
+
 // Security Headers with Helmet
 app.use(helmet({
   crossOriginResourcePolicy: false // Allows frontend to load /uploads images & docs
 }));
 
-// Rate Limiter: General API Limiter (300 requests per 15 minutes)
+// CORS Configuration (Allows all Vercel preview & production domains)
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+}));
+
+// Rate Limiter: General API Limiter
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 300,
-  message: { message: "Too many requests from this IP, please try again later." },
+  max: 500,
+  message: { message: "Too many requests, please try again later." },
   standardHeaders: true,
   legacyHeaders: false,
 });
 app.use("/api", apiLimiter);
 
-// Rate Limiter: Strict on Login to prevent brute force (10 attempts per 15 minutes)
+// Rate Limiter: Login protection
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 60, // 60 attempts per 15 minutes
   message: { message: "Too many login attempts. Please try again after 15 minutes." },
   standardHeaders: true,
   legacyHeaders: false,
 });
 app.use("/User/login", loginLimiter);
 app.use("/user/login", loginLimiter);
-
-// Safe CORS
-const allowedOrigins = process.env.CLIENT_ORIGIN
-  ? process.env.CLIENT_ORIGIN.split(",").map(o => o.trim())
-  : ["http://localhost:3000", "http://localhost:5001"];
-
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
-      return callback(null, true);
-    }
-    return callback(new Error("Blocked by CORS policy"));
-  },
-  credentials: true
-}));
 
 app.use(express.json());
 
